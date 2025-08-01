@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/0/3c2740cc4eb246e1b7fb33f68d25084c/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3c2740cc4eb246e1b7fb33f68d25084c
+run_name: unique-fly-725
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754024615161
+status: 1
+tags: []
+user_id: sandi

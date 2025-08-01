@@ -41,6 +41,7 @@ data/
 import numpy as np
 import sys
 import os
+import argparse
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
@@ -48,6 +49,19 @@ from tensorflow.keras.layers import Dropout, Flatten, Dense
 from tensorflow.keras import applications
 from tensorflow.keras.callbacks import CSVLogger
 from tqdm.keras import TqdmCallback
+import mlflow
+import mlflow.tensorflow
+
+# Fix Unicode issues on Windows
+os.environ['PYTHONIOENCODING'] = 'utf-8'
+os.environ['MLFLOW_TRACKING_URI'] = 'http://localhost:5000'
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Train model with poisoning experiment')
+    parser.add_argument('--p', type=float, default=0.0, help='Poisoning percentage')
+    return parser.parse_args()
+
+args = parse_args()
 
 pathname = os.path.dirname(sys.argv[0])
 path = os.path.abspath(pathname)
@@ -115,14 +129,49 @@ def train_top_model():
     model.compile(optimizer='rmsprop',
                   loss='binary_crossentropy', metrics=['accuracy'])
 
-    model.fit(train_data, train_labels,
-              epochs=epochs,
-              batch_size=batch_size,
-              validation_data=(validation_data, validation_labels),
-              verbose=0,
-              callbacks=[TqdmCallback(), CSVLogger("metrics.csv")])
+    # Start MLflow run with error handling
+    try:
+        with mlflow.start_run():
+            # Log parameters
+            mlflow.log_param("poisoning_percentage", args.p)
+            mlflow.log_param("epochs", epochs)
+            mlflow.log_param("batch_size", batch_size)
+            
+            # Train model
+            history = model.fit(train_data, train_labels,
+                              epochs=epochs,
+                              batch_size=batch_size,
+                              validation_data=(validation_data, validation_labels),
+                              verbose=0,
+                              callbacks=[TqdmCallback(), CSVLogger("metrics.csv")])
+            
+            # Log metrics
+            for epoch in range(epochs):
+                mlflow.log_metric("train_loss", history.history['loss'][epoch], step=epoch)
+                mlflow.log_metric("train_accuracy", history.history['accuracy'][epoch], step=epoch)
+                mlflow.log_metric("val_loss", history.history['val_loss'][epoch], step=epoch)
+                mlflow.log_metric("val_accuracy", history.history['val_accuracy'][epoch], step=epoch)
+            
+            # Log model
+            mlflow.tensorflow.log_model(model, "model")
+            
+            # Log metrics file
+            mlflow.log_artifact("metrics.csv")
+            
+            print(f"MLflow run completed successfully for poisoning level {args.p}%")
+            
+    except Exception as e:
+        print(f"MLflow error (continuing without MLflow): {e}")
+        # Fallback: train without MLflow
+        history = model.fit(train_data, train_labels,
+                          epochs=epochs,
+                          batch_size=batch_size,
+                          validation_data=(validation_data, validation_labels),
+                          verbose=0,
+                          callbacks=[TqdmCallback(), CSVLogger("metrics.csv")])
+    
     model.save_weights(top_model_weights_path)
 
 
 save_bottlebeck_features()
-train_top_model()
+train_top_model() 

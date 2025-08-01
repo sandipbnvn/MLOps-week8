@@ -3,3 +3,6 @@ scipy
 tensorflow>=2,<3
 tqdm>=4.41.0,<5
 dvc
+pandas
+matplotlib
+mlflow 

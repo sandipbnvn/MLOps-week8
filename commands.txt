@@ -14,3 +14,47 @@ rm -f new-labels.zip
 dvc add data
 python train.py
 dvc add model.weights.h5
+
+--------------------------------------------------week 8---------------------------------------
+
+Data poisoning example
+#teaching
+
+git clone https://github.com/rangav82/mlops-week4.git
+
+git checkout -b week8
+
+Tell dvc to use the local path from the previous instance – dvc remote add -d localremote ~/week2/example-versioning/.dvc/cache
+
+Move the data files over to do the poisoning. 50 from cat to dog, 50 from dog to cat.
+
+mkdir tmp && ls | for i in \seq 50`; do file="cat.$i.jpg"; echo $file; mv $file tmp/; done`
+
+mv tmp/* ../dogs/
+
+rmdir tmp/
+
+repeat for dogs
+
+python3 -m venv .env
+
+source .env/bin/activate
+
+pip install -r requirements.txt
+
+python train.py
+
+dvc add data/model.weights.h5
+
+git commit -m "poisoning 5% of the input data by swapping 50 cats with 50 dogs"
+
+git tag -v0.1 -m "poisoned model, 2000 images"
+
+git push -u origin week8
+
+Run the GitHub actions: Sanity Test on week8 branch.
+
+If you are getting no space left on device error on the google cloud shell, either switch over to the workbench instance and do this experiment.
+Or, free up some space by removing .env folder of week2/.
+
+
