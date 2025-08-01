@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/0/91f578aa6e6f470a8364cc5a20910c10/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 91f578aa6e6f470a8364cc5a20910c10
+run_name: overjoyed-turtle-413
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754025892869
+status: 1
+tags: []
+user_id: sandi
