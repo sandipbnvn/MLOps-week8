@@ -1,0 +1,7 @@
+git clone https://github.com/iterative/example-versioning.git
+dvc get https://github.com/iterative/dataset-registry tutorials/versioning/data.zip
+unzip -q data.zip
+rm -f data.zip
+dvc add data
+python train.py
+dvc add model.weights.h5
