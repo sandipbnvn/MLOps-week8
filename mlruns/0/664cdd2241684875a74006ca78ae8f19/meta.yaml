@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/0/664cdd2241684875a74006ca78ae8f19/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 664cdd2241684875a74006ca78ae8f19
+run_name: serious-mink-495
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754025018177
+status: 1
+tags: []
+user_id: sandi

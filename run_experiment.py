@@ -60,10 +60,10 @@ def run_single_experiment(p_value):
     return True
 
 def restore_dataset():
-    """Restore the original dataset state from git."""
+    """Restore the original dataset state from DVC."""
     print("Restoring original dataset state...")
     
-    result = subprocess.run("git checkout HEAD -- data/", shell=True, capture_output=True, text=True, encoding='utf-8')
+    result = subprocess.run("dvc checkout data.dvc", shell=True, capture_output=True, text=True, encoding='utf-8')
     
     if result.returncode != 0:
         print(f"Error restoring dataset: {result.stderr}")
