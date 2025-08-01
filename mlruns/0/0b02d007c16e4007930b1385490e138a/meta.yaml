@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/0/0b02d007c16e4007930b1385490e138a/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0b02d007c16e4007930b1385490e138a
+run_name: puzzled-stoat-700
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754025231847
+status: 1
+tags: []
+user_id: sandi
