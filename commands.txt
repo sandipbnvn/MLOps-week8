@@ -5,3 +5,12 @@ rm -f data.zip
 dvc add data
 python train.py
 dvc add model.weights.h5
+git add .
+git commit
+git push
+dvc get https://github.com/iterative/dataset-registry tutorials/versioning/new-labels.zip
+unzip -q new-labels.zip
+rm -f new-labels.zip
+dvc add data
+python train.py
+dvc add model.weights.h5
